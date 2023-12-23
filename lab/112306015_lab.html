@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #dice-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .die {
+            width: 80px;
+            height: 80px;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        #result-table {
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        #result-table th, #result-table td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        #roll-button {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <title>隨機投擲骰子</title>
+</head>
+<body>
+
+<div id="dice-container"></div>
+<button id="roll-button">Roll Dice</button>
+<table id="result-table">
+    <thead>
+    <tr>
+        <th>Face</th>
+        <th>Percent</th>
+    </tr>
+    </thead>
+    <tbody id="result-body"></tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const diceImages = ['die1.png', 'die2.png', 'die3.png', 'die4.png', 'die5.png', 'die6.png'];
+        const resultTableBody = document.getElementById('result-body');
+        const rollButton = document.getElementById('roll-button');
+        let rollCount = 0;
+
+        function rollDice() {
+            const diceContainer = document.getElementById('dice-container');
+            diceContainer.innerHTML = '';
+
+            const resultRow = document.createElement('tr');
+            const rollNumberCell = document.createElement('td');
+            const resultCell = document.createElement('td');
+
+            rollCount++;
+            rollNumberCell.textContent = rollCount;
+
+            let totalPercentage = 0;
+
+            for (let i = 0; i < 12; i++) {
+                const randomIndex = Math.floor(Math.random() * 6);
+                const dieImage = diceImages[randomIndex];
+                const randomPercentage = Math.random() * 100;
+                totalPercentage += randomPercentage;
+
+                const dieElement = document.createElement('div');
+                dieElement.style.backgroundImage = `url(${dieImage})`;
+                dieElement.textContent = `${randomPercentage.toFixed(2)}%`;
+                dieElement.className = 'die';
+
+                diceContainer.appendChild(dieElement);
+            }
+
+            const averagePercentage = (totalPercentage / 12).toFixed(2);
+            resultCell.textContent = `${averagePercentage}%`;
+
+            resultRow.appendChild(rollNumberCell);
+            resultRow.appendChild(resultCell);
+            resultTableBody.appendChild(resultRow);
+        }
+
+        rollDice(); // Initial roll
+
+        rollButton.addEventListener('click', rollDice);
+    });
+</script>
+
+</body>
+</html>
